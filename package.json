@@ -1,7 +1,7 @@
 {
-  "name": "claude-chat-app",
+  "name": "george-ai",
   "version": "1.0.0",
-  "description": "",
+  "description": "George AI — a multimodal chat app powered by Groq, Claude, or OpenAI",
   "main": "index.js",
   "scripts": {
     "start": "node server.js",
@@ -9,20 +9,22 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/jbgcloud/claude-chat-app.git"
+    "url": "git+https://github.com/jbgcloud/george-ai.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "type": "commonjs",
   "bugs": {
-    "url": "https://github.com/jbgcloud/claude-chat-app/issues"
+    "url": "https://github.com/jbgcloud/george-ai/issues"
   },
-  "homepage": "https://github.com/jbgcloud/claude-chat-app#readme",
+  "homepage": "https://github.com/jbgcloud/george-ai#readme",
   "dependencies": {
     "@anthropic-ai/sdk": "^0.90.0",
     "@google/generative-ai": "^0.24.1",
     "dotenv": "^17.4.2",
-    "express": "^5.2.1"
+    "express": "^5.2.1",
+    "groq-sdk": "^1.1.2",
+    "openai": "^6.34.0"
   }
 }

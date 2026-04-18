@@ -1,4 +1,4 @@
-# claude-chat-app — Project Context
+# george-ai — Project Context
 
 ## What this is
 A simple Claude AI chat web app built as a learning project. The goal is to learn GitHub workflows and GCP deployment while building something real.
@@ -8,7 +8,7 @@ A simple Claude AI chat web app built as a learning project. The goal is to lear
 - **AI:** Claude API (Anthropic SDK) — chat endpoint
 - **Frontend:** Plain HTML/CSS/JS (simple chat UI)
 - **Hosting:** GCP Cloud Run (free tier)
-- **Repo:** https://github.com/jbgcloud/claude-chat-app
+- **Repo:** https://github.com/jbgcloud/george-ai
 
 ## Current status (as of 2026-04-18)
 - Repo created on GitHub and cloned locally
