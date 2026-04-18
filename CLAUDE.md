@@ -34,6 +34,7 @@ George AI — a multimodal chat app built as a learning project. Supports image 
 - `height: 100dvh` (with `100vh` fallback) — fixes iOS Safari viewport height bug
 - `padding-bottom: max(16px, env(safe-area-inset-bottom))` on input area — safe for iPhone notch
 - All colors use CSS custom properties; theme toggled via `data-theme` on `<html>`
+- `scrollIntoView({ behavior: 'instant', block: 'end' })` on new messages — reliable auto-scroll regardless of layout reflow timing
 
 ## Environment variables (`.env`)
 - `GROQ_API_KEY` — required for default Groq provider (free tier)

@@ -483,7 +483,7 @@
       }
       if (text) div.appendChild(document.createTextNode(text));
       chat.appendChild(div);
-      chat.scrollTop = chat.scrollHeight;
+      div.scrollIntoView({ behavior: 'instant', block: 'end' });
       return div;
     }
 
