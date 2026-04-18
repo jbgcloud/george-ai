@@ -1,27 +1,43 @@
 # george-ai — Project Context
 
 ## What this is
-A simple Claude AI chat web app built as a learning project. The goal is to learn GitHub workflows and GCP deployment while building something real.
+George AI — a multimodal chat app built as a learning project. Supports image paste, multi-provider AI (Groq/Anthropic/OpenAI), and persistent per-user memory via localStorage.
 
-## Tech stack (planned)
-- **Backend:** Node.js + Express
-- **AI:** Claude API (Anthropic SDK) — chat endpoint
-- **Frontend:** Plain HTML/CSS/JS (simple chat UI)
+## Tech stack
+- **Backend:** Node.js + Express (`server.js`)
+- **AI:** Groq (default, free) / Anthropic / OpenAI — switchable in-app
+- **Frontend:** Plain HTML/CSS/JS (`public/index.html`)
 - **Hosting:** GCP Cloud Run (free tier)
 - **Repo:** https://github.com/jbgcloud/george-ai
+- **Local folder:** `C:\Users\tobit\claude-chat-app\` (folder name not yet renamed)
 
-## Current status (as of 2026-04-18)
-- Repo created on GitHub and cloned locally
-- App not built yet — this is the starting point
+## Current status (as of 2026-04-19)
+- App deployed and live: https://george-ai-870279995346.us-central1.run.app
+- All features built and merged to `main`
 
-## What to build next
-1. `npm init` and install dependencies (`express`, `@anthropic-ai/sdk`, `dotenv`)
-2. Create `server.js` — Express server with a `/chat` POST endpoint calling Claude API
-3. Create `public/index.html` — basic chat UI
-4. Add `.env` for `ANTHROPIC_API_KEY` (never commit this)
-5. Add `.gitignore` (exclude `node_modules/`, `.env`)
-6. Test locally, then push to GitHub
-7. Set up GCP Cloud Run deployment
+## What's built
+- `POST /chat` — multimodal, provider-routed (Groq/Anthropic/OpenAI), accepts image + summary
+- `POST /summarize` — generates running memory summary per user
+- Frontend: username modal, settings panel, image paste/preview, End Session button
+- localStorage keys: `george-ai-username`, `george-ai-user-{name}`, `george-ai-settings`
+
+### Settings panel fields
+| Field | Options | Persisted as |
+|---|---|---|
+| Provider | Groq / Anthropic / OpenAI | `settings.provider` |
+| API Key | text | `settings.apiKey` |
+| Model | per-provider list | `settings.model` |
+| Font Size | Small / Medium / Large | `settings.fontSize` |
+| Theme | Dark / Light | `settings.theme` |
+
+### Mobile UX
+- `height: 100dvh` (with `100vh` fallback) — fixes iOS Safari viewport height bug
+- `padding-bottom: max(16px, env(safe-area-inset-bottom))` on input area — safe for iPhone notch
+- All colors use CSS custom properties; theme toggled via `data-theme` on `<html>`
+
+## Environment variables (`.env`)
+- `GROQ_API_KEY` — required for default Groq provider (free tier)
+- `PORT` — optional, defaults to 3000
 
 ## Owner context
 - Jay is learning GitHub and GCP from scratch — explain each step

@@ -5,42 +5,77 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>George AI</title>
   <style>
+    :root {
+      --bg: #0f0f0f;
+      --surface: #1a1a1a;
+      --surface-alt: #1e1e1e;
+      --border: #2a2a2a;
+      --text: #e8e8e8;
+      --text-muted: #888;
+      --accent: #2563eb;
+      --accent-hover: #1d4ed8;
+      --user-bubble: #2563eb;
+      --error-bg: #3b1010;
+      --error-border: #7f1d1d;
+      --error-text: #fca5a5;
+      --danger: #f87171;
+      --danger-hover: #7f1d1d;
+    }
+
+    [data-theme="light"] {
+      --bg: #f9f9f9;
+      --surface: #ffffff;
+      --surface-alt: #f0f0f0;
+      --border: #e0e0e0;
+      --text: #1a1a1a;
+      --text-muted: #666;
+      --accent: #2563eb;
+      --accent-hover: #1d4ed8;
+      --user-bubble: #2563eb;
+      --error-bg: #fee2e2;
+      --error-border: #fca5a5;
+      --error-text: #991b1b;
+      --danger: #dc2626;
+      --danger-hover: #fee2e2;
+    }
+
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
       font-family: system-ui, sans-serif;
-      background: #0f0f0f;
-      color: #e8e8e8;
+      background: var(--bg);
+      color: var(--text);
       display: flex;
       flex-direction: column;
       height: 100vh;
+      height: 100dvh;
       overflow: hidden;
     }
 
     /* ── Header ── */
     header {
       padding: 12px 20px;
-      background: #1a1a1a;
-      border-bottom: 1px solid #2a2a2a;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
       display: flex;
       align-items: center;
       gap: 12px;
     }
     .header-title { font-size: 18px; font-weight: 600; flex: 1; }
-    .header-user { font-size: 13px; color: #888; }
+    .header-user { font-size: 13px; color: var(--text-muted); }
     .icon-btn {
       background: none;
-      border: 1px solid #2a2a2a;
-      color: #aaa;
+      border: 1px solid var(--border);
+      color: var(--text-muted);
       border-radius: 6px;
       padding: 6px 12px;
       font-size: 13px;
       cursor: pointer;
     }
-    .icon-btn:hover { background: #2a2a2a; color: #e8e8e8; }
+    .icon-btn:hover { background: var(--border); color: var(--text); }
     .icon-btn:disabled { opacity: 0.35; cursor: not-allowed; }
-    #end-session-btn { border-color: #7f1d1d; color: #f87171; }
-    #end-session-btn:hover:not(:disabled) { background: #3b1010; }
+    #end-session-btn { border-color: var(--error-border); color: var(--danger); }
+    #end-session-btn:hover:not(:disabled) { background: var(--error-bg); }
 
     /* ── Chat window ── */
     #chat {
@@ -59,16 +94,17 @@
       white-space: pre-wrap;
       word-break: break-word;
     }
-    .user { align-self: flex-end; background: #2563eb; }
-    .assistant { align-self: flex-start; background: #1e1e1e; border: 1px solid #2a2a2a; }
-    .error { align-self: flex-start; background: #3b1010; border: 1px solid #7f1d1d; color: #fca5a5; }
+    .user { align-self: flex-end; background: var(--user-bubble); color: #fff; }
+    .assistant { align-self: flex-start; background: var(--surface-alt); border: 1px solid var(--border); }
+    .error { align-self: flex-start; background: var(--error-bg); border: 1px solid var(--error-border); color: var(--error-text); }
     .message img { max-width: 240px; border-radius: 8px; display: block; margin-bottom: 6px; }
 
     /* ── Input area ── */
     #input-area {
       padding: 12px 20px 16px;
-      background: #1a1a1a;
-      border-top: 1px solid #2a2a2a;
+      padding-bottom: max(16px, env(safe-area-inset-bottom));
+      background: var(--surface);
+      border-top: 1px solid var(--border);
     }
     #image-preview-wrap {
       display: none;
@@ -76,11 +112,11 @@
       gap: 8px;
       margin-bottom: 8px;
     }
-    #image-preview-wrap img { width: 64px; height: 64px; object-fit: cover; border-radius: 6px; border: 1px solid #2a2a2a; }
+    #image-preview-wrap img { width: 64px; height: 64px; object-fit: cover; border-radius: 6px; border: 1px solid var(--border); }
     #clear-image {
-      background: #3b1010;
+      background: var(--error-bg);
       border: none;
-      color: #f87171;
+      color: var(--danger);
       border-radius: 4px;
       cursor: pointer;
       font-size: 16px;
@@ -91,24 +127,24 @@
       justify-content: center;
       align-self: center;
     }
-    #clear-image:hover { background: #7f1d1d; }
+    #clear-image:hover { background: var(--danger-hover); }
     .input-row { display: flex; gap: 10px; }
     #input {
       flex: 1;
       padding: 12px 16px;
-      background: #0f0f0f;
-      border: 1px solid #2a2a2a;
+      background: var(--bg);
+      border: 1px solid var(--border);
       border-radius: 8px;
-      color: #e8e8e8;
+      color: var(--text);
       font-size: 15px;
       resize: none;
       outline: none;
       font-family: inherit;
     }
-    #input:focus { border-color: #2563eb; }
+    #input:focus { border-color: var(--accent); }
     #send {
       padding: 12px 20px;
-      background: #2563eb;
+      background: var(--accent);
       color: white;
       border: none;
       border-radius: 8px;
@@ -116,7 +152,7 @@
       cursor: pointer;
       font-weight: 600;
     }
-    #send:hover { background: #1d4ed8; }
+    #send:hover { background: var(--accent-hover); }
     #send:disabled { opacity: 0.5; cursor: not-allowed; }
 
     /* ── Modals / overlays ── */
@@ -128,8 +164,8 @@
     }
     .overlay.hidden { display: none; }
     .modal {
-      background: #1a1a1a;
-      border: 1px solid #2a2a2a;
+      background: var(--surface);
+      border: 1px solid var(--border);
       border-radius: 14px;
       padding: 32px;
       width: 360px;
@@ -138,24 +174,24 @@
       gap: 16px;
     }
     .modal h2 { font-size: 20px; font-weight: 600; }
-    .modal p { font-size: 14px; color: #aaa; line-height: 1.5; }
+    .modal p { font-size: 14px; color: var(--text-muted); line-height: 1.5; }
     .modal input, .modal select {
       padding: 10px 14px;
-      background: #0f0f0f;
-      border: 1px solid #2a2a2a;
+      background: var(--bg);
+      border: 1px solid var(--border);
       border-radius: 8px;
-      color: #e8e8e8;
+      color: var(--text);
       font-size: 15px;
       width: 100%;
       outline: none;
       font-family: inherit;
     }
-    .modal input:focus, .modal select:focus { border-color: #2563eb; }
-    .modal label { font-size: 13px; color: #aaa; margin-bottom: 4px; display: block; }
+    .modal input:focus, .modal select:focus { border-color: var(--accent); }
+    .modal label { font-size: 13px; color: var(--text-muted); margin-bottom: 4px; display: block; }
     .modal-actions { display: flex; gap: 10px; justify-content: flex-end; }
     .btn-primary {
       padding: 10px 20px;
-      background: #2563eb;
+      background: var(--accent);
       color: white;
       border: none;
       border-radius: 8px;
@@ -163,24 +199,24 @@
       font-weight: 600;
       cursor: pointer;
     }
-    .btn-primary:hover { background: #1d4ed8; }
+    .btn-primary:hover { background: var(--accent-hover); }
     .btn-secondary {
       padding: 10px 16px;
       background: none;
-      color: #aaa;
-      border: 1px solid #2a2a2a;
+      color: var(--text-muted);
+      border: 1px solid var(--border);
       border-radius: 8px;
       font-size: 14px;
       cursor: pointer;
     }
-    .btn-secondary:hover { background: #2a2a2a; color: #e8e8e8; }
+    .btn-secondary:hover { background: var(--border); color: var(--text); }
 
     /* Settings panel */
     #settings-panel {
       position: fixed; top: 0; right: 0; bottom: 0;
       width: 320px;
-      background: #1a1a1a;
-      border-left: 1px solid #2a2a2a;
+      background: var(--surface);
+      border-left: 1px solid var(--border);
       padding: 24px;
       display: flex;
       flex-direction: column;
@@ -192,18 +228,18 @@
     #settings-panel.open { transform: translateX(0); }
     #settings-panel h3 { font-size: 16px; font-weight: 600; }
     .field { display: flex; flex-direction: column; gap: 6px; }
-    .field label { font-size: 13px; color: #aaa; }
+    .field label { font-size: 13px; color: var(--text-muted); }
     .field input, .field select {
       padding: 10px 14px;
-      background: #0f0f0f;
-      border: 1px solid #2a2a2a;
+      background: var(--bg);
+      border: 1px solid var(--border);
       border-radius: 8px;
-      color: #e8e8e8;
+      color: var(--text);
       font-size: 14px;
       outline: none;
       font-family: inherit;
     }
-    .field input:focus, .field select:focus { border-color: #2563eb; }
+    .field input:focus, .field select:focus { border-color: var(--accent); }
     .settings-footer { margin-top: auto; display: flex; gap: 10px; }
   </style>
 </head>
@@ -236,12 +272,27 @@
       </select>
     </div>
     <div class="field" id="settings-apikey-field">
-      <label>API Key <span style="color:#888;font-size:11px">(stored in browser only)</span></label>
+      <label>API Key <span style="color: var(--text-muted); font-size: 11px">(stored in browser only)</span></label>
       <input type="password" id="settings-apikey" placeholder="Leave empty to use server key" />
     </div>
     <div class="field">
       <label>Model</label>
       <select id="settings-model"></select>
+    </div>
+    <div class="field">
+      <label>Font Size</label>
+      <select id="settings-fontsize">
+        <option value="small">Small</option>
+        <option value="medium">Medium</option>
+        <option value="large">Large</option>
+      </select>
+    </div>
+    <div class="field">
+      <label>Theme</label>
+      <select id="settings-theme">
+        <option value="dark">Dark</option>
+        <option value="light">Light</option>
+      </select>
     </div>
     <div class="settings-footer">
       <button class="btn-primary" id="settings-save">Save</button>
@@ -280,12 +331,13 @@
       openai: ['gpt-4o', 'gpt-4o-mini', 'gpt-4-turbo'],
     };
     const DEFAULT_MODELS = { groq: 'llama-3.3-70b-versatile', anthropic: 'claude-sonnet-4-6', openai: 'gpt-4o' };
+    const FONT_SIZES = { small: '13px', medium: '15px', large: '18px' };
 
     // ── State ──
     let username = null;
     let userData = { summary: '', currentSession: [] };
-    let settings = { provider: 'groq', apiKey: '', model: 'llama-3.3-70b-versatile' };
-    let pastedImage = null; // { data: base64, mediaType: string, previewUrl: string }
+    let settings = { provider: 'groq', apiKey: '', model: 'llama-3.3-70b-versatile', fontSize: 'medium', theme: 'dark' };
+    let pastedImage = null;
     let sessionHasMessages = false;
 
     // ── DOM ──
@@ -300,6 +352,15 @@
     const imagePreviewWrap = document.getElementById('image-preview-wrap');
     const imagePreview = document.getElementById('image-preview');
 
+    // ── Apply settings to DOM ──
+    function applySettings(s) {
+      document.documentElement.setAttribute('data-theme', s.theme || 'dark');
+      const size = FONT_SIZES[s.fontSize] || '15px';
+      document.querySelectorAll('.message, #input, .icon-btn, .field label').forEach(el => {
+        el.style.fontSize = size;
+      });
+    }
+
     // ── localStorage helpers ──
     function saveUserData() {
       localStorage.setItem(`george-ai-user-${username}`, JSON.stringify(userData));
@@ -313,7 +374,7 @@
     }
     function loadSettings() {
       const raw = localStorage.getItem('george-ai-settings');
-      return raw ? JSON.parse(raw) : { provider: 'groq', apiKey: '', model: 'llama-3.3-70b-versatile' };
+      return raw ? JSON.parse(raw) : { provider: 'groq', apiKey: '', model: 'llama-3.3-70b-versatile', fontSize: 'medium', theme: 'dark' };
     }
 
     // ── Username flow ──
@@ -363,6 +424,8 @@
     settingsBtn.addEventListener('click', () => {
       document.getElementById('settings-provider').value = settings.provider;
       document.getElementById('settings-apikey').value = settings.apiKey;
+      document.getElementById('settings-fontsize').value = settings.fontSize || 'medium';
+      document.getElementById('settings-theme').value = settings.theme || 'dark';
       populateModelDropdown(settings.provider);
       settingsPanel.classList.add('open');
     });
@@ -370,7 +433,10 @@
       settings.provider = document.getElementById('settings-provider').value;
       settings.apiKey = document.getElementById('settings-apikey').value.trim();
       settings.model = document.getElementById('settings-model').value;
+      settings.fontSize = document.getElementById('settings-fontsize').value;
+      settings.theme = document.getElementById('settings-theme').value;
       saveSettings();
+      applySettings(settings);
       settingsPanel.classList.remove('open');
     });
     document.getElementById('settings-close').addEventListener('click', () => {
@@ -409,6 +475,7 @@
     function addMessage(role, text, imgSrc) {
       const div = document.createElement('div');
       div.className = `message ${role}`;
+      div.style.fontSize = FONT_SIZES[settings.fontSize] || '15px';
       if (imgSrc) {
         const img = document.createElement('img');
         img.src = imgSrc;
@@ -454,7 +521,6 @@
 
         addMessage('assistant', data.reply);
 
-        // Persist to currentSession
         userData.currentSession.push({ role: 'user', content: message || '[image]' });
         userData.currentSession.push({ role: 'assistant', content: data.reply });
         saveUserData();
@@ -514,6 +580,7 @@
 
     // ── Init ──
     settings = loadSettings();
+    applySettings(settings);
     initUsername();
   </script>
 </body>
