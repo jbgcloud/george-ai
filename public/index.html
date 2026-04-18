@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Claude Chat</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: system-ui, sans-serif;
+      background: #0f0f0f;
+      color: #e8e8e8;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+    }
+
+    header {
+      padding: 16px 24px;
+      background: #1a1a1a;
+      border-bottom: 1px solid #2a2a2a;
+      font-size: 18px;
+      font-weight: 600;
+    }
+
+    #chat {
+      flex: 1;
+      overflow-y: auto;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .message {
+      max-width: 720px;
+      padding: 12px 16px;
+      border-radius: 12px;
+      line-height: 1.6;
+      white-space: pre-wrap;
+    }
+
+    .user {
+      align-self: flex-end;
+      background: #2563eb;
+    }
+
+    .assistant {
+      align-self: flex-start;
+      background: #1e1e1e;
+      border: 1px solid #2a2a2a;
+    }
+
+    .error {
+      align-self: flex-start;
+      background: #3b1010;
+      border: 1px solid #7f1d1d;
+      color: #fca5a5;
+    }
+
+    #input-area {
+      padding: 16px 24px;
+      background: #1a1a1a;
+      border-top: 1px solid #2a2a2a;
+      display: flex;
+      gap: 12px;
+    }
+
+    #input {
+      flex: 1;
+      padding: 12px 16px;
+      background: #0f0f0f;
+      border: 1px solid #2a2a2a;
+      border-radius: 8px;
+      color: #e8e8e8;
+      font-size: 15px;
+      resize: none;
+      outline: none;
+    }
+
+    #input:focus { border-color: #2563eb; }
+
+    #send {
+      padding: 12px 20px;
+      background: #2563eb;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 15px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    #send:hover { background: #1d4ed8; }
+    #send:disabled { opacity: 0.5; cursor: not-allowed; }
+  </style>
+</head>
+<body>
+  <header>Claude Chat</header>
+  <div id="chat"></div>
+  <div id="input-area">
+    <textarea id="input" rows="2" placeholder="Message Claude..."></textarea>
+    <button id="send">Send</button>
+  </div>
+
+  <script>
+    const chat = document.getElementById('chat');
+    const input = document.getElementById('input');
+    const sendBtn = document.getElementById('send');
+    const history = [];
+
+    function addMessage(role, text) {
+      const div = document.createElement('div');
+      div.className = `message ${role}`;
+      div.textContent = text;
+      chat.appendChild(div);
+      chat.scrollTop = chat.scrollHeight;
+      return div;
+    }
+
+    async function sendMessage() {
+      const message = input.value.trim();
+      if (!message) return;
+
+      input.value = '';
+      sendBtn.disabled = true;
+      addMessage('user', message);
+
+      try {
+        const res = await fetch('/chat', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ message, history }),
+        });
+
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || 'Request failed');
+
+        history.push({ role: 'user', content: message });
+        history.push({ role: 'assistant', content: data.reply });
+        addMessage('assistant', data.reply);
+      } catch (err) {
+        addMessage('error', 'Error: ' + err.message);
+      } finally {
+        sendBtn.disabled = false;
+        input.focus();
+      }
+    }
+
+    sendBtn.addEventListener('click', sendMessage);
+    input.addEventListener('keydown', e => {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        sendMessage();
+      }
+    });
+  </script>
+</body>
+</html>
